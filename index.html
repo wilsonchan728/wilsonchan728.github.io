@@ -1,0 +1,139 @@
+<html>
+  <head>
+    <link href="https://fonts.googleapis.com/css?family=Poor+Story" rel="stylesheet">
+    <style>
+    body{
+        font-family: 'Poor Story', cursive;
+        color: white;
+        background-color: rgb(187,20,7);
+    }
+
+    .title{
+        z-index: 5;
+    }
+
+    .gameplay{
+        width: 50%;
+        margin:0 auto;
+        padding: 10px;
+        display:flex;
+        flex-wrap: wrap;
+        flex-direction: column;
+        border: 2px solid black;
+        text-align: center;
+        background-color:chocolate;
+    }
+
+    img{
+        width:50%;
+        margin:0 auto;
+        flex-wrap: wrap;
+        transition: 0.2s;
+        animation-duration: 2s;
+        animation-name: fadeIn;
+    }
+
+    img:active{
+        transform: scale(1.2);
+    }
+
+    h4{
+        font-size:25px;
+        color: red;
+        transition-delay: .2s;
+    }
+
+      #progressText, h4{
+        color: white;
+      }
+
+      @keyframes fadeIn{
+        0%{
+          opacity: 0;
+          transform: scale(0);
+        }
+        100%{
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class = "gameplay">
+        <h2 class="title">Clickeria - click to bake a Pizza </h2>
+        <img src="https://image.spreadshirtmedia.com/image-server/v1/mp/designs/1015358504,width=178,height=178/pizza-cartoon.png" onclick="addMoney(amountPerClick)" width=200>
+        <h4>Current Money: <span id="moneyValue">0</span></h4>
+          <h4 id="progressText"></h4>
+        <div class="upgradeArea">
+            <div class="pizzaPrice">
+                <p>Your pizza sells for $<span id="currentPizzaPrice">2</span>!</p>
+                <button onclick="increaseSellingPrice();">Click to Increase Price! <span id="priceSpan">($0)</span></button>
+            </div>
+        </div>
+    </main>
+  </body>
+
+  <script>
+  //HTML Elements
+  const currentMoney = document.getElementById('moneyValue');
+  const currentPizzaPrice = document.getElementById('currentPizzaPrice');
+  const progressText = document.getElementById('progressText');
+
+  //HTML Buttons
+  const priceSpan = document.getElementById('priceSpan');
+
+  //Game variables
+  var money = 0;
+  var moneyOverLifetime = 0;
+  var amountPerClick = 2;
+  var costToUpgrade;
+
+  const messageList = ["You're selling pizza slices from a stand on the sidewalk. We all gotta start somewhere, right?",
+                       "Hey look, your pizza stand is starting to get more customers! Keep this up and you'll have your own pizzeria someday!",
+                       "CONGRATS! You just rented your first Pizzeria location!",
+                       "Wow, this place sure is starting to get busy. Keep it up and you might have to get another location to seat all these customers!",
+                       "A 2nd location??? Great job, your pizza empire is really growing now!"];
+
+  progressText.innerHTML = messageList[0];
+
+  //Functions
+  function addMoney(amountToAdd){
+    money += amountToAdd;
+    moneyOverLifetime += amountToAdd;
+    currentMoney.innerHTML = money;
+    updateProgressMessage();
+  }
+
+   function deductMoney(amountToDeduct){
+     money -= amountToDeduct;
+     currentMoney.innerHTML = money;
+   }
+
+    function increaseSellingPrice(){
+        costToUpgrade = 50 * parseInt(currentPizzaPrice.innerHTML);
+
+        if (money >= costToUpgrade){
+            deductMoney(costToUpgrade);
+            amountPerClick += 2;
+            currentPizzaPrice.innerHTML = amountPerClick;
+        }
+        costToUpgrade = 50 * parseInt(currentPizzaPrice.innerHTML);
+        priceSpan.innerHTML = "($ " + costToUpgrade + ")";
+    }
+
+    function updateProgressMessage(){
+      if (moneyOverLifetime >= 1000)
+        progressText.innerHTML = messageList[4];
+      else if (moneyOverLifetime >= 850)
+        progressText.innerHTML = messageList[3];
+      else if (moneyOverLifetime >= 500)
+        progressText.innerHTML = messageList[2];
+      else if (moneyOverLifetime >= 300)
+        progressText.innerHTML = messageList[1];
+      else if (moneyOverLifetime >= 100)
+        progressText.innerHTML = messageList[0];
+    }
+
+  </script>
+</html>
